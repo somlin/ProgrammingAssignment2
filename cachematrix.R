@@ -1,15 +1,40 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The complete function of this script is to: stop the script from calculating 
+## the inverse of a matrix everytime by caching the inverse of that matrix in 
+## memory
 
-## Write a short comment describing this function
+## makeCacheMatrix: The function creates a named list object with elements 
+## set,get,setInv,getInv which are in turn functions defined inside 
+## makeCacheMatrix function
 
 makeCacheMatrix <- function(x = matrix()) {
+    inv <- NULL
+    set <- function(y){
+        x   <<- y
+        inv <<- NULL
+    }
+    get <- function() x
+    setInv <- function(inverse) inv <<- inverse
+    getInv <- function() inv
+    list(set = set, get = get,
+       setInv = setInv,
+       getInv = getInv)
 
 }
 
 
-## Write a short comment describing this function
+## Checks if the inverse of the matrix is already present in cache. If not then 
+## calculates the inverse, sets that in cache and return a matrix that is the 
+## inverse of data
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    inv <- x$getInv()
+    if(!is.null(inv)) {
+      message("getting cached data")
+      return(inv)
+    }
+    data <- x$get()
+    inv <- solve(data, ...)
+    x$setInv(inv)
+    inv
+        
 }
